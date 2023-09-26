@@ -1,5 +1,7 @@
 ## TODO
 
+- Emails: davidayodele@gmail.com, lumi8866@gmail.com, togptraining@gmail.com
+
 - Make key generator (David by Wed)
 
 - Make key generator send key to App (Olumide by Wed)
@@ -9,3 +11,5 @@
 - Transition to Video form, that marks completion after watched. 
 
 - Transition to Quiz form (multi page - 5 q's). 
+
+
