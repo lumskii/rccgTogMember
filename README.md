@@ -2,7 +2,8 @@
 
 - Emails: davidayodele@gmail.com, lumi8866@gmail.com, togptraining@gmail.com
 
-- Make key generator (David by Wed)
+- Make key generator (David by Wed) - Link: https://qr.page/g/M5zYK6XlaC 
+  QR code: ![Access Code QR](access_code_qr.jpg)
 
 - Make key generator send key to App (Olumide by Wed)
 
