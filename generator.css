@@ -1,5 +1,5 @@
 body {
-    background-color: #00242e;
+    background-color: #fff;
   }
   
   .cont {
@@ -10,7 +10,7 @@ body {
   }
   
   .btn {
-    background-color: #32edd7;
+    background-color: #dadada;
     border: none;
     padding: 16px 32px;
     border-radius: 4px;
@@ -19,11 +19,11 @@ body {
   }
   
   .btn:hover {
-    background-color: #2ad1bd;
+    background-color: #c0c0c0;
   }
   
   #number {
     font-size: 28px;
-    color: pink;
+    color: black;
   }
   
