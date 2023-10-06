@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-// import Certificate from './Certificate';
+import Certificate from './Certificate';
 import Questions from './Questions';
 import Video from './Video';
 

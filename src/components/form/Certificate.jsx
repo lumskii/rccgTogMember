@@ -18,7 +18,19 @@ export default function Certificate({ firstName, lastName, answers }) {
 
         // Create a Blob and download it as a text file
         const blob = new Blob([certificateContent], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'certificate.html';
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+
   return (
-    <div>Certificate</div>
+    <div>
+        <h1>Certificate</h1>
+        <p>Congratulations, {firstName} {lastName}!</p>
+        <button onClick={generateCertificate}>Download</button>
+    </div>
   )
 }
