@@ -1,6 +1,8 @@
 import React from "react";
 import Paper from "@mui/material/Paper";
 import Signup from "../../pages/SignupPage";
+import Login from "../../pages/LoginPage";
+import FormHandler from "../form/FormHandler";
 
 function Layout() {
   return (
@@ -14,7 +16,10 @@ function Layout() {
         padding: "20px",
       }}
     >
-      <Signup />
+      {/* <Signup /> */}
+      {/* <Login /> */}
+      <FormHandler />
+
     </Paper>
   );
 }
