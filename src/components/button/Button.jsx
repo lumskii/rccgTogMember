@@ -1,7 +1,14 @@
 import React from 'react'
 
-export default function Button() {
+export default function Button({ label, color, variant, onClick, disabled }) {
   return (
-    <div>Button</div>
+    <Button
+        color={color || "primary"}
+        variant={variant || "contained"}
+        onClick={onClick}
+        disabled={disabled}
+    >
+        {label}
+    </Button>
   )
 }
