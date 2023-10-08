@@ -22,7 +22,7 @@ export default function VideoPage({ onNext }) {
     <div>
         <h1>Video</h1>
         <Iframe
-            url="https://www.youtube.com/embed/7sDY4m8KNLc?autoplay=1"
+            url="https://www.youtube.com/embed/Lz7BSm2HSVs&ab_channel=TOGPTraining?autoplay=1"
             ref={videoRef}
             onEnd={handleIframeEnd}
             width="100%"
