@@ -1,26 +1,22 @@
 import React, { useState } from 'react';
 import Certificate from './Certificate';
 import Questions from './Questions';
-import Video from './Video';
+import VideoPage from './Video';
+import { useParams } from 'react-router-dom';
 
 const FormHandler = () => {
+    const { firstName, lastName } = useParams();
     const [videoFinished, setVideoFinished] = useState(false);
     const [answers, setAnswers] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
 
     const handleVideoFinish = () => {
         setVideoFinished(true);
+        nextPage();
     };
 
     const handleAnswersChange = (newAnswers) => {
         setAnswers(newAnswers);
-    };
-
-    const handleNameChange = (first, last) => {
-        setFirstName(first);
-        setLastName(last);
     };
 
     const nextPage = () => {
@@ -29,10 +25,13 @@ const FormHandler = () => {
 
   return (
     <div>
+      Testing
         {currentPage === 1 && (
-            <Video
+            <VideoPage
                 onVideoFinish={handleVideoFinish}
                 disabled={!videoFinished}
+                firstName={firstName}
+                lastName={lastName}
             />
         )}
 

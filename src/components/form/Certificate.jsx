@@ -1,4 +1,5 @@
 import React from 'react'
+import Button from '../button/Button';
 
 export default function Certificate({ firstName, lastName, answers }) {
     const generateCertificate = () => {
@@ -30,7 +31,7 @@ export default function Certificate({ firstName, lastName, answers }) {
     <div>
         <h1>Certificate</h1>
         <p>Congratulations, {firstName} {lastName}!</p>
-        <button onClick={generateCertificate}>Download</button>
+        <Button onClick={generateCertificate} label="Download" />
     </div>
   )
 }

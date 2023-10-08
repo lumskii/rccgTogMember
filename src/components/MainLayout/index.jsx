@@ -1,10 +1,7 @@
 import React from "react";
 import Paper from "@mui/material/Paper";
-import Signup from "../../pages/SignupPage";
-import Login from "../../pages/LoginPage";
-import FormHandler from "../form/FormHandler";
 
-function Layout() {
+function Layout({content}) {
   return (
     <Paper
       elevation={3}
@@ -16,10 +13,7 @@ function Layout() {
         padding: "20px",
       }}
     >
-      {/* <Signup /> */}
-      <Login />
-      {/* <FormHandler /> */}
-
+      {content}
     </Paper>
   );
 }

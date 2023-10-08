@@ -19,10 +19,12 @@ import {
 } from "@mui/material";
 import { LockOutlined } from "@mui/icons-material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { IMaskInput } from "react-imask";
+import { auth } from "../../firebase";
+import { useNavigate } from "react-router-dom";
 
 function Copyright(props) {
   return (
@@ -65,12 +67,40 @@ const PhoneField = React.forwardRef(function PhoneField(props, ref) {
 });
 
 function Signup() {
+  const history = useNavigate();
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
   const [gender, setGender] = useState("");
   const [howDidYouHear, setHowDidYouHear] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState({
     textmask: "(100) 000-0000",
     numberformat: "1320",
   });
+  
+
+  const register = (e) => {
+    e.preventDefault();
+
+    auth
+      .createUserWithEmailAndPassword(
+        emailRef.current.value,
+        passwordRef.current.value
+      )
+      .then((authUser) => {
+        console.log(authUser);
+      })
+      .catch((error) => {
+        alert(error.message);
+      });
+      history.push(`/`);
+  };
+
+  const handleNameChange = (e) => {
+    setFirstName(e.target.value);
+    setLastName(e.target.value);
+  };
 
   const handlePhoneChange = (event) => {
     setPhone({
@@ -123,11 +153,13 @@ function Signup() {
                 <TextField
                   autoComplete="given-name"
                   name="firstName"
+                  firstName={firstName}
                   required
                   fullWidth
                   id="firstName"
                   label="First Name"
                   autoFocus
+                  onChange={handleNameChange}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -135,9 +167,11 @@ function Signup() {
                   required
                   fullWidth
                   id="lastName"
+                  lastName={lastName}
                   label="Last Name"
                   name="lastName"
                   autoComplete="family-name"
+                  onChange={handleNameChange}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -187,6 +221,7 @@ function Signup() {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
+                  inputRef={emailRef}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -198,6 +233,7 @@ function Signup() {
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                  inputRef={passwordRef}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -224,15 +260,16 @@ function Signup() {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                    id='access-code'
-                    label='Access Code'
-                    type='password'
-                    fullWidth
+                  id="access-code"
+                  label="Access Code"
+                  type="password"
+                  fullWidth
                 />
               </Grid>
             </Grid>
             <Button
               type="submit"
+              onClick={register}
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
@@ -241,8 +278,8 @@ function Signup() {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="#" variant="body2">
-                  Already have an account? Sign in
+                <Link href="/login" variant="body2">
+                  Already have an account? Login
                 </Link>
               </Grid>
             </Grid>
