@@ -4,6 +4,9 @@
 
 - Quiz API Endpoint: https://script.google.com/macros/s/AKfycbyTZu_pjRc4IR6S2QYHqFPpMjI1G37doh7r18Oubs9AFGqJFqYUjuxXYjP4VgcZJdRz/exec
 
+  - For POST requests, use params: "fname", "lname", "email", and "phone" to update sheet
+  - For GET requests, just query the url  
+
 - Make key generator (David by Wed) - Link: https://qr.page/g/M5zYK6XlaC 
   QR code: ![Access Code QR](access_code_qr.jpg)
 
