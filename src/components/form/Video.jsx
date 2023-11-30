@@ -1,43 +1,31 @@
-import React from 'react'
-import Button from '../button/Button'
-import { useRef } from 'react'
-import { useState } from 'react';
-import Iframe from 'react-iframe';
+import React from 'react';
+import ReactPlayer from 'react-player';
 
-export default function VideoPage({ onNext }) {
-    const videoRef = useRef(null);
-    const [videoFinished, setVideoFinished] = useState(false);
-
-    const handleVideoFinish = () => {
-        setVideoFinished(true);
-    };
-
-    const handleIframeEnd = () => {
-        if (videoFinished){
-            onNext();
-        }
-    };
+const VideoPage = ({ videoUrl, onVideoFinish, videoFinished, onNext }) => {
+  const handleVideoEnd = () => {
+    if (videoFinished) {
+      onVideoFinish();
+    } else {
+      onNext();
+    }
+  };
 
   return (
     <div>
-        <h1>Video</h1>
-        <Iframe
-            url="https://www.youtube.com/embed/Lz7BSm2HSVs&ab_channel=TOGPTraining?autoplay=1"
-            ref={videoRef}
-            onEnd={handleIframeEnd}
-            width="100%"
-            height="360"
-            padding="20px"
-            frameBorder="0"
-        allowFullScreen
-        title="Video"
+      <h1>Video</h1>
+      <div style={{ position: 'relative', paddingTop: '56.25%' }}>
+        <ReactPlayer
+          url={videoUrl}
+          playing={false}
+          onEnded={handleVideoEnd}
+          width="100%"
+          height="100%"
+          style={{ position: 'absolute', top: 0, left: 0 }}
+          controls={true}
         />
-        {/* <Button
-            label="Next"
-            onClick={onNext}
-            disabled={!videoFinished}
-        /> */}
-        <button onClick={onNext}>Next</button>
+      </div>
     </div>
-  )
-}
+  );
+};
+
+export default VideoPage;

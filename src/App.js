@@ -13,7 +13,7 @@ import {
 } from "./features/userSlice";
 import { CircularProgress } from "@mui/material";
 import FormHandler from "./components/form/FormHandler.jsx";
-import Signup from "./pages/SignupPage/index.jsx";
+// import Signup from "./pages/SignupPage/index.jsx";
 import Login from "./pages/LoginPage/index.jsx";
 
 function App() {
@@ -61,8 +61,8 @@ function App() {
         <Header />
         {!user ? (
           <Routes>
-            <Route exact path="/" element={<Layout content={<Signup />} />} />
-            <Route exact path="/login" element={<Layout content={<Login />} />} />
+            {/* <Route exact path="/" element={<Layout content={<Signup />} />} /> */}
+            <Route exact path="/" element={<Layout content={<Login />} />} />
           </Routes>
         ) : (
           <Routes>

@@ -1,5 +1,5 @@
 import React from 'react'
-import Button from '../button/Button';
+import MuiButton from '../button/Button';
 
 export default function Certificate({ firstName, lastName, answers }) {
     const generateCertificate = () => {
@@ -8,11 +8,6 @@ export default function Certificate({ firstName, lastName, answers }) {
             <h1>Certificate of Completion</h1>
 
             <p>This is to certify that ${firstName} ${lastName} has completed the membership training.</p>
-
-            <h2>Quiz Results</h2>
-            <ul>
-                ${answers.map((answer, index) => `<li key=${index}>${answer}</li>`)}
-            </ul>
 
             <p>Date: ${new Date().toLocaleDateString()}</p>
         `;
@@ -31,7 +26,7 @@ export default function Certificate({ firstName, lastName, answers }) {
     <div>
         <h1>Certificate</h1>
         <p>Congratulations, {firstName} {lastName}!</p>
-        <Button onClick={generateCertificate} label="Download" />
+        <MuiButton onClick={generateCertificate} label="Download" />
     </div>
   )
 }

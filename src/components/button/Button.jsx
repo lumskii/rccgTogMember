@@ -1,6 +1,7 @@
 import React from 'react'
+import { Button } from '@mui/material'
 
-export default function Button({ label, color, variant, onClick, disabled }) {
+export default function MuiButton({ label, color, variant, onClick, disabled }) {
   return (
     <Button
         color={color || "primary"}

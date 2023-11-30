@@ -24,7 +24,7 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { IMaskInput } from "react-imask";
 import { auth } from "../../firebase";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 function Copyright(props) {
   return (
@@ -67,7 +67,7 @@ const PhoneField = React.forwardRef(function PhoneField(props, ref) {
 });
 
 function Signup() {
-  const history = useNavigate();
+  // const history = useNavigate();
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
   const [gender, setGender] = useState("");
@@ -94,7 +94,7 @@ function Signup() {
       .catch((error) => {
         alert(error.message);
       });
-      history.push(`/`);
+      // history.push(`/`);
   };
 
   const handleNameChange = (e) => {

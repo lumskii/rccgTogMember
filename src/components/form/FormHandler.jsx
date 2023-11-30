@@ -1,56 +1,113 @@
-import React, { useState } from 'react';
-import Certificate from './Certificate';
-import Questions from './Questions';
-import VideoPage from './Video';
-import { useParams } from 'react-router-dom';
+import React, { useState } from "react";
+import VideoPage from "./Video";
+import Questions from "./Questions";
+import Certificate from "./Certificate";
+import VideoData from "./VideoData";
+import MuiButton from "../button/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import { user } from "../header";
 
-const FormHandler = () => {
-    const { firstName, lastName } = useParams();
-    const [videoFinished, setVideoFinished] = useState(false);
-    const [answers, setAnswers] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
+const FormHandler = ({ firstName, lastName }) => {
+  const [currentPage, setCurrentPage] = useState(0);
+  const [congratulationsOpen, setCongratulationsOpen] = useState(false);
 
-    const handleVideoFinish = () => {
-        setVideoFinished(true);
-        nextPage();
-    };
+  const handleVideoFinish = () => {
+    if (currentPage < VideoData.length * 2 - 1) {
+      setCurrentPage(currentPage + 1);
+    } else {
+      // If all videos and questions are completed, show congratulations dialog
+      setCongratulationsOpen(true);
+    }
+  };
 
-    const handleAnswersChange = (newAnswers) => {
-        setAnswers(newAnswers);
-    };
+  const handleQuestionSubmit = () => {
+    if (currentPage < VideoData.length * 2 - 1) {
+      setCurrentPage(currentPage + 1);
+    } else {
+      // If all videos and questions are completed, show congratulations dialog
+      setCongratulationsOpen(true);
+    }
+  };
 
-    const nextPage = () => {
-        setCurrentPage(currentPage + 1);
-    };
+  const handleCongratulationsClose = () => {
+    setCongratulationsOpen(false);
+    // After clicking "OK" in the dialog, move to the Certificate page
+    setCurrentPage(VideoData.length * 2);
+  };
+
+  const PageDisplay = () => {
+    if (currentPage % 2 === 0 && currentPage < VideoData.length * 2) {
+      // Display VideoPage for even pages
+      return <VideoPage videoUrl={VideoData[currentPage / 2]?.videoUrl} />;
+    } else if (currentPage % 2 === 1 && currentPage < VideoData.length * 2) {
+      // Display Questions for odd pages
+      return (
+        <div>
+          <Questions
+            questions={VideoData[Math.floor(currentPage / 2)]?.questions}
+            numQuestions={2}
+          />
+        </div>
+      );
+    } else if (currentPage === VideoData.length * 2) {
+      return <Certificate firstName={user.name} lastName={lastName} />;
+    } else {
+      return null;
+    }
+  };
 
   return (
-    <div>
-      Testing
-        {currentPage === 1 && (
-            <VideoPage
-                onVideoFinish={handleVideoFinish}
-                disabled={!videoFinished}
-                firstName={firstName}
-                lastName={lastName}
+     <div>
+      {PageDisplay()}
+      {currentPage !== VideoData.length * 2 && ( // Conditionally render buttons
+        <div
+          style={{
+            display: "flex",
+            width: "100%",
+            justifyContent: "space-between",
+            margin: "10px 0",
+          }}
+        >
+          <div>
+            <MuiButton
+              label="Back"
+              onClick={() => setCurrentPage(currentPage - 1)}
+              disabled={!currentPage}
             />
-        )}
-
-        {currentPage === 2 && (
-            <Questions
-                onAnswersChange={handleAnswersChange}
-                onNext={nextPage}
+          </div>
+          <div>
+            <MuiButton
+              label={currentPage === VideoData.length * 2 ? "Finish" : "Next"}
+              onClick={
+                currentPage === VideoData.length * 2 ? null : handleVideoFinish
+              }
             />
-        )}
-
-        {currentPage === 3 && (
-            <Certificate
-                firstName={firstName}
-                lastName={lastName}
-                answers={answers}
-            />
-        )}
+          </div>
+        </div>
+      )}
+      {/* Congratulations Dialog */}
+      <Dialog
+        open={congratulationsOpen}
+        onClose={handleCongratulationsClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">Congratulations!</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            You have completed this program.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <MuiButton onClick={handleCongratulationsClose} label="OK" />
+        </DialogActions>
+      </Dialog>
     </div>
-  )
-}
+  );
+};
 
-export default FormHandler
+export default FormHandler;
