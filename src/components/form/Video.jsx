@@ -1,13 +1,13 @@
 import React from 'react';
+import { useState } from 'react';
 import ReactPlayer from 'react-player';
 
-const VideoPage = ({ videoUrl, onVideoFinish, videoFinished, onNext }) => {
-  const handleVideoEnd = () => {
-    if (videoFinished) {
-      onVideoFinish();
-    } else {
-      onNext();
-    }
+const VideoPage = ({ videoUrl, onEnded, onPlay }) => {
+  const [isPlaying, setIsPlaying] = useState(true);
+
+  const handlePlay = () => {
+    setIsPlaying(true);
+    onPlay();
   };
 
   return (
@@ -16,12 +16,14 @@ const VideoPage = ({ videoUrl, onVideoFinish, videoFinished, onNext }) => {
       <div style={{ position: 'relative', paddingTop: '56.25%' }}>
         <ReactPlayer
           url={videoUrl}
-          playing={false}
-          onEnded={handleVideoEnd}
+          playing={isPlaying}
+          onEnded={onEnded}
+          onPlay={handlePlay}
           width="100%"
           height="100%"
           style={{ position: 'absolute', top: 0, left: 0 }}
           controls={true}
+          light={"https://adaptalux.com/wp-content/uploads/2020/01/Black-background-photography-example.jpg"}
         />
       </div>
     </div>

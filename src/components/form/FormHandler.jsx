@@ -10,18 +10,33 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { user } from "../header";
+import jsonData from "./MemberQuiz.json";
+import { useEffect } from "react";
 
 const FormHandler = ({ firstName, lastName }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [congratulationsOpen, setCongratulationsOpen] = useState(false);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    setData(JSON.parse(JSON.stringify(jsonData)));
+  }, []);
 
   const handleVideoFinish = () => {
+    setIsVideoPlaying(false);
+
     if (currentPage < VideoData.length * 2 - 1) {
       setCurrentPage(currentPage + 1);
+      console.log(data);
     } else {
       // If all videos and questions are completed, show congratulations dialog
       setCongratulationsOpen(true);
     }
+  };
+
+  const handleVideoPlay = () => {
+    setIsVideoPlaying(true);
   };
 
   const handleQuestionSubmit = () => {
@@ -42,7 +57,13 @@ const FormHandler = ({ firstName, lastName }) => {
   const PageDisplay = () => {
     if (currentPage % 2 === 0 && currentPage < VideoData.length * 2) {
       // Display VideoPage for even pages
-      return <VideoPage videoUrl={VideoData[currentPage / 2]?.videoUrl} />;
+      return (
+        <VideoPage
+          videoUrl={VideoData[currentPage / 2]?.videoUrl}
+          onEnded={handleVideoFinish}
+          onPlay={handleVideoPlay}
+        />
+      );
     } else if (currentPage % 2 === 1 && currentPage < VideoData.length * 2) {
       // Display Questions for odd pages
       return (
@@ -61,7 +82,7 @@ const FormHandler = ({ firstName, lastName }) => {
   };
 
   return (
-     <div>
+    <div>
       {PageDisplay()}
       {currentPage !== VideoData.length * 2 && ( // Conditionally render buttons
         <div
@@ -85,6 +106,7 @@ const FormHandler = ({ firstName, lastName }) => {
               onClick={
                 currentPage === VideoData.length * 2 ? null : handleVideoFinish
               }
+              disabled={isVideoPlaying}
             />
           </div>
         </div>

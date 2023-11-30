@@ -1,6 +1,6 @@
 const VideoData = [
     {
-        videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        videoUrl: "https://dai.ly/k6pN3FvXwMCTAKzHxQ7",
         questions: [
             {
                 id: 1,
@@ -17,7 +17,7 @@ const VideoData = [
         ]
     },
     {
-        videoUrl: "https://www.youtube.com/watch?v=DLzxrzFCyOs",
+        videoUrl: "https://dai.ly/k6kB5YhBXlM4v9zHxQ8",
         questions: [
             {
                 id: 1,
@@ -34,7 +34,7 @@ const VideoData = [
         ]
     },
     {
-        videoUrl: "https://www.youtube.com/watch?v=IwBS6QGsH_4",
+        videoUrl: "https://dai.ly/k5cxdWDR8xWgBHzHxQ5",
         questions: [
             {
                 id: 1,
@@ -51,7 +51,7 @@ const VideoData = [
         ]
     },
     {
-        videoUrl: "https://www.youtube.com/watch?v=2Vv-BfVoq4g",
+        videoUrl: "https://dai.ly/k2r0Asm1ByoOZezHxQ6",
         questions: [
             {
                 id: 1,
@@ -68,7 +68,7 @@ const VideoData = [
         ]
     },
     {
-        videoUrl: "https://www.youtube.com/watch?v=J---aiyznGQ",
+        videoUrl: "https://dai.ly/k5VAtrVjZuepIFzHxQ4",
         questions: [
             {
                 id: 1,
