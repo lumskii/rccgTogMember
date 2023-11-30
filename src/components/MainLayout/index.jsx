@@ -1,7 +1,7 @@
 import React from "react";
 import Paper from "@mui/material/Paper";
 
-function Layout({content}) {
+function Layout({ content }) {
   return (
     <Paper
       elevation={3}
@@ -11,6 +11,10 @@ function Layout({content}) {
         margin: "30px auto",
         width: "60%",
         padding: "20px",
+        "@media (max-width: 600px)": {
+          width: "90%",
+          margin: "10px auto",
+        },
       }}
     >
       {content}
@@ -19,3 +23,4 @@ function Layout({content}) {
 }
 
 export default Layout;
+
