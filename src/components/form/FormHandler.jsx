@@ -10,25 +10,19 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { user } from "../header";
-import jsonData from "./MemberQuiz.json";
-import { useEffect } from "react";
 
 const FormHandler = ({ firstName, lastName }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [congratulationsOpen, setCongratulationsOpen] = useState(false);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
-  const [data, setData] = useState(null);
-
-  useEffect(() => {
-    setData(JSON.parse(JSON.stringify(jsonData)));
-  }, []);
+  const [attempt, setAttempt] = useState(undefined);
+  const [incorrectAnswers, setIncorrectAnswers] = useState([]);
 
   const handleVideoFinish = () => {
     setIsVideoPlaying(false);
 
     if (currentPage < VideoData.length * 2 - 1) {
       setCurrentPage(currentPage + 1);
-      console.log(data);
     } else {
       // If all videos and questions are completed, show congratulations dialog
       setCongratulationsOpen(true);
@@ -40,19 +34,59 @@ const FormHandler = ({ firstName, lastName }) => {
   };
 
   const handleQuestionSubmit = () => {
-    if (currentPage < VideoData.length * 2 - 1) {
-      setCurrentPage(currentPage + 1);
+    const currentQuestions = VideoData[Math.floor(currentPage / 2)]?.questions;
+  
+    // Check if all questions are attempted
+    const areAllAttempted =
+      attempt !== undefined && attempt.every((option) => option !== undefined);
+  
+    if (!areAllAttempted) {
+      alert("Please attempt all questions before submitting.");
+      return;
+    }
+  
+    // Check if the selected options are correct
+    const areAllCorrect = currentQuestions.every(
+      (question, index) => attempt[index] === question.correctAnswer
+    );
+  
+    if (areAllCorrect) {
+      // If all answers are correct, display a different message
+      const message = "All answers are correct! Move on to the next page.";
+      alert(message);
+  
+      // Move to the next page
+      setCurrentPage((prevPage) => prevPage + 1);
     } else {
-      // If all videos and questions are completed, show congratulations dialog
+      // Display a dialog with incorrect answers
+      const incorrect = currentQuestions
+        .filter((question, index) => attempt[index] !== question.correctAnswer)
+        .map((question) => question.correctAnswer);
+  
+      setIncorrectAnswers(incorrect);
       setCongratulationsOpen(true);
     }
   };
 
   const handleCongratulationsClose = () => {
-    setCongratulationsOpen(false);
+  setCongratulationsOpen(false);
+
+  if (
+    incorrectAnswers.length === 0 &&
+    currentPage % 2 === 1 &&
+    currentPage < VideoData.length * 2 - 1
+  ) {
     // After clicking "OK" in the dialog, move to the Certificate page
     setCurrentPage(VideoData.length * 2);
-  };
+  } else {
+    // For other pages, move to the next page
+    setCurrentPage((prevPage) => prevPage + 1);
+  }
+
+  // Reset incorrect answers and attempt
+  setIncorrectAnswers([]);
+  setAttempt(undefined);
+};
 
   const PageDisplay = () => {
     if (currentPage % 2 === 0 && currentPage < VideoData.length * 2) {
@@ -70,8 +104,13 @@ const FormHandler = ({ firstName, lastName }) => {
         <div>
           <Questions
             questions={VideoData[Math.floor(currentPage / 2)]?.questions}
-            numQuestions={2}
+            numQuestions={3}
+            onAttempt={setAttempt}
           />
+  
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <MuiButton label="Submit" onClick={handleQuestionSubmit} />
+          </div>
         </div>
       );
     } else if (currentPage === VideoData.length * 2) {
@@ -80,6 +119,7 @@ const FormHandler = ({ firstName, lastName }) => {
       return null;
     }
   };
+
 
   return (
     <div>
@@ -106,7 +146,7 @@ const FormHandler = ({ firstName, lastName }) => {
               onClick={
                 currentPage === VideoData.length * 2 ? null : handleVideoFinish
               }
-              disabled={isVideoPlaying}
+              disabled={isVideoPlaying || currentPage % 2 === 0}
             />
           </div>
         </div>
@@ -118,10 +158,14 @@ const FormHandler = ({ firstName, lastName }) => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">Congratulations!</DialogTitle>
+        <DialogTitle id="alert-dialog-title">
+          {incorrectAnswers.length ===0 ? `Congratulations!` : `Incorrect Answers` }
+          </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            You have completed this program.
+            {incorrectAnswers.length === 0
+              ? "You have completed this program."
+              : "Some answers are wrong. Please try again."}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
