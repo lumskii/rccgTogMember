@@ -18,11 +18,11 @@ export default function Certificate({ firstName, lastName, answers }) {
         `;
 
         // Create a Blob and download it as a text file
-        const blob = new Blob([certificateContent], { type: 'text/html' });
+        const blob = new Blob([certificateContent], { type: 'text/jpg' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'certificate.html';
+        a.download = 'certificate.jpg';
         a.click();
         URL.revokeObjectURL(url);
     }
