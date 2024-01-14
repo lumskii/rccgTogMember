@@ -12,7 +12,7 @@ const VideoPage = ({ videoUrl, onEnded, onPlay }) => {
 
   return (
     <div>
-      <h1>Video</h1>
+      {/* <h1>Video</h1> */}
       <div style={{ position: 'relative', paddingTop: '56.25%' }}>
         <ReactPlayer
           url={videoUrl}

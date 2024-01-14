@@ -1,15 +1,20 @@
 import React from 'react'
 import MuiButton from '../button/Button';
+import certificateBackground from '../../pages/images/certificate.jpg'
+
 
 export default function Certificate({ firstName, lastName, answers }) {
+  const certBack = certificateBackground;
     const generateCertificate = () => {
         // Generate the certificate content dynamically
         const certificateContent = `
-            <h1>Certificate of Completion</h1>
+        <div style="text-align: center; background-image: url('${certBack}'); background-size: cover; height: 100vh; color: #fff;">
+          <h1>Certificate of Completion</h1>
 
-            <p>This is to certify that ${firstName} ${lastName} has completed the membership training.</p>
+          <p>This is to certify that ${firstName} ${lastName} has completed the membership training.</p>
 
-            <p>Date: ${new Date().toLocaleDateString()}</p>
+          <p>Date: ${new Date().toLocaleDateString()}</p>
+          </div>
         `;
 
         // Create a Blob and download it as a text file

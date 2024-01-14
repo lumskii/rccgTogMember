@@ -2,27 +2,35 @@ import React, { useEffect, useState } from "react";
 
 export default function Questions({ questions, numQuestions, onAttempt }) {
   const [selectedOptions, setSelectedOptions] = useState(
-    Array(numQuestions).fill(undefined)
+    Array(numQuestions).fill(null)
+  );
+  const [incorrectAnswers, setIncorrectAnswers] = useState(
+    Array(numQuestions).fill(false)
+  );
+  const [questionAnswered, setQuestionAnswered] = useState(
+    Array(numQuestions).fill(false)
   );
 
   useEffect(() => {
     // Notify parent component that an option has been selected
     onAttempt(selectedOptions);
-  }, [selectedOptions, onAttempt]);
+  }, [selectedOptions, questionAnswered, onAttempt]);
 
   const handleOptionSelect = (questionIndex, optionIndex) => {
     const newSelectedOptions = [...selectedOptions];
     newSelectedOptions[questionIndex] = optionIndex;
     setSelectedOptions(newSelectedOptions);
-  };
 
+    // Mark the question as answered
+    setQuestionAnswered((prev) => {
+      const newQuestionAnswered = [...prev];
+      newQuestionAnswered[questionIndex] = true;
+      return newQuestionAnswered;
+    });
+  };
 
   return (
     <div>
-      <div style={{display: "grid"}}>
-        <h1 style={{display: "flex", justifyContent: "center"}}>Questions</h1>
-        <p style={{display: "flex", justifyContent: "center", margin: "15px"}}>Answer all the questions</p>
-      </div>
       {questions.map((question, questionIndex) => (
         <div key={question.id}>
           <h3 style={{ margin: "20px 10px" }}>{question.question}</h3>
@@ -46,6 +54,18 @@ export default function Questions({ questions, numQuestions, onAttempt }) {
                 </label>
               </li>
             ))}
+            {selectedOptions[questionIndex] !== null && (
+              <p
+                style={{
+                  color: incorrectAnswers[questionIndex] ? "red" : "green",
+                  margin: "10px",
+                }}
+              >
+                {incorrectAnswers[questionIndex]
+                  ? "Incorrect!"
+                  : "Correct!"}
+              </p>
+            )}
           </ul>
         </div>
       ))}

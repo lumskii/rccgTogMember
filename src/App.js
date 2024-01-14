@@ -42,22 +42,42 @@ function App() {
 
   if (!isLoaded) {
     return (
-      <CircularProgress
-        sx={{
-          color: "secondary",
-          position: "absolute",
-          zIndex: "999",
-          marginleft: "50vw",
-          marginTop: "50vh",
-          transform: "translate(-50%, -50%)",
-        }}
-      />
+      <div>
+        <CircularProgress
+          style={{
+            color: "secondary",
+            position: "absolute",
+            zIndex: "999",
+            left: "50%",
+            top: "50%",
+            transform: "translate(-50%, -50%)",
+          }}
+        />
+      </div>
     );
   }
 
   return (
     <Router>
       <div>
+      <div
+        style={{
+          position: "fixed",
+          width: "100%",
+          backgroundColor: "#f00", // Red background for warning
+          color: "#fff", // White text for warning
+          textAlign: "center",
+          zIndex: 1000,
+          paddingTop: "20px", // Adjust padding as needed
+          paddingBottom: "20px"
+        }}
+      >
+        <h2>Warning: This app is still under development!</h2>
+        <p>
+          This app is still under development. Please do not use this app for
+          any official purposes.
+        </p>
+      </div>
         <Header />
         {!user ? (
           <Routes>

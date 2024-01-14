@@ -15,8 +15,16 @@ const FormHandler = ({ firstName, lastName }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [congratulationsOpen, setCongratulationsOpen] = useState(false);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
-  const [attempt, setAttempt] = useState(undefined);
+  const [attempt, setAttempt] = useState(null);
   const [incorrectAnswers, setIncorrectAnswers] = useState([]);
+
+
+  const idxStyle = {
+    fontSize: "1em",
+    fontWeight: "bold",
+    color: "#1976d2",
+    marginLeft: "10px",
+  };
 
   const handleVideoFinish = () => {
     setIsVideoPlaying(false);
@@ -35,26 +43,26 @@ const FormHandler = ({ firstName, lastName }) => {
 
   const handleQuestionSubmit = () => {
     const currentQuestions = VideoData[Math.floor(currentPage / 2)]?.questions;
-  
+
     // Check if all questions are attempted
     const areAllAttempted =
-      attempt !== undefined && attempt.every((option) => option !== undefined);
-  
+      attempt !== null && attempt.every((option) => option !== null);
+
     if (!areAllAttempted) {
       alert("Please attempt all questions before submitting.");
       return;
     }
-  
+
     // Check if the selected options are correct
     const areAllCorrect = currentQuestions.every(
       (question, index) => attempt[index] === question.correctAnswer
     );
-  
+
     if (areAllCorrect) {
       // If all answers are correct, display a different message
       const message = "All answers are correct! Move on to the next page.";
       alert(message);
-  
+
       // Move to the next page
       setCurrentPage((prevPage) => prevPage + 1);
     } else {
@@ -62,52 +70,100 @@ const FormHandler = ({ firstName, lastName }) => {
       const incorrect = currentQuestions
         .filter((question, index) => attempt[index] !== question.correctAnswer)
         .map((question) => question.correctAnswer);
-  
+
       setIncorrectAnswers(incorrect);
       setCongratulationsOpen(true);
     }
   };
 
   const handleCongratulationsClose = () => {
-  setCongratulationsOpen(false);
+    setCongratulationsOpen(false);
 
-  if (
-    incorrectAnswers.length === 0 &&
-    currentPage % 2 === 1 &&
-    currentPage < VideoData.length * 2 - 1
-  ) {
-    // After clicking "OK" in the dialog, move to the Certificate page
-    setCurrentPage(VideoData.length * 2);
-  } else {
-    // For other pages, move to the next page
-    setCurrentPage((prevPage) => prevPage + 1);
-  }
+    if (
+      incorrectAnswers.length === 0 &&
+      currentPage % 2 === 1 &&
+      currentPage < VideoData.length * 2 - 1
+    ) {
+      // After clicking "OK" in the dialog, move to the Certificate page
+      setCurrentPage(VideoData.length * 2);
+    } else {
+      // For other pages, move to the next page
+      setCurrentPage((prevPage) => prevPage + 1);
+    }
 
-  // Reset incorrect answers and attempt
-  setIncorrectAnswers([]);
-  setAttempt(undefined);
-};
+    // Reset incorrect answers and attempt
+    setIncorrectAnswers([]);
+    setAttempt(null);
+  };
 
   const PageDisplay = () => {
     if (currentPage % 2 === 0 && currentPage < VideoData.length * 2) {
       // Display VideoPage for even pages
       return (
-        <VideoPage
-          videoUrl={VideoData[currentPage / 2]?.videoUrl}
-          onEnded={handleVideoFinish}
-          onPlay={handleVideoPlay}
-        />
+        <div>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <h1>Video</h1>
+            <span
+              style={{
+                fontSize: "2em",
+                fontWeight: "bold",
+                color: "#1976d2",
+                marginLeft: "10px",
+              }}
+            >
+              {currentPage / 2 + 1}
+            </span>
+            /
+            <span style={{ fontSize: "2em", fontWeight: "bold" }}>
+              {VideoData.length}
+            </span>
+          </div>
+          <VideoPage
+            videoUrl={VideoData[currentPage / 2]?.videoUrl}
+            onEnded={handleVideoFinish}
+            onPlay={handleVideoPlay}
+          />
+        </div>
       );
     } else if (currentPage % 2 === 1 && currentPage < VideoData.length * 2) {
       // Display Questions for odd pages
       return (
         <div>
+          <div style={{ display: "grid" }}>
+            <h1 style={{ display: "flex", justifyContent: "center" }}>
+              Questions 
+              <span
+              style={idxStyle}
+            >
+              {Math.ceil(currentPage / 2)}
+            </span>
+            /
+            <span style={{ fontSize: "1em", fontWeight: "bold" }}>
+              {VideoData.length}
+            </span>
+            </h1>
+            <p
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                margin: "15px",
+              }}
+            >
+              Answer all the questions
+            </p>
+          </div>
           <Questions
             questions={VideoData[Math.floor(currentPage / 2)]?.questions}
             numQuestions={3}
             onAttempt={setAttempt}
           />
-  
+
           <div style={{ display: "flex", justifyContent: "center" }}>
             <MuiButton label="Submit" onClick={handleQuestionSubmit} />
           </div>
@@ -119,7 +175,6 @@ const FormHandler = ({ firstName, lastName }) => {
       return null;
     }
   };
-
 
   return (
     <div>
@@ -159,8 +214,10 @@ const FormHandler = ({ firstName, lastName }) => {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {incorrectAnswers.length ===0 ? `Congratulations!` : `Incorrect Answers` }
-          </DialogTitle>
+          {incorrectAnswers.length === 0
+            ? `Congratulations!`
+            : `Incorrect Answers`}
+        </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             {incorrectAnswers.length === 0
