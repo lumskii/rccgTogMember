@@ -15,6 +15,8 @@ import { CircularProgress } from "@mui/material";
 import FormHandler from "./components/form/FormHandler.jsx";
 // import Signup from "./pages/SignupPage/index.jsx";
 import Login from "./pages/LoginPage/index.jsx";
+import Test from "./components/form/Test.jsx";
+import Signup from "./pages/SignupPage/index.jsx";
 
 function App() {
   const user = useSelector(selectUser);
@@ -60,7 +62,7 @@ function App() {
   return (
     <Router>
       <div>
-      <div
+      {/* <div
         style={{
           position: "fixed",
           width: "100%",
@@ -77,16 +79,18 @@ function App() {
           This app is still under development. Please do not use this app for
           any official purposes.
         </p>
-      </div>
+      </div> */}
         <Header />
         {!user ? (
           <Routes>
             {/* <Route exact path="/" element={<Layout content={<Signup />} />} /> */}
             <Route exact path="/" element={<Layout content={<Login />} />} />
+            <Route exact path="/signupAdmin" element={<Layout content={<Signup />} />} />
           </Routes>
         ) : (
           <Routes>
             <Route exact path="/" element={<Layout content={<FormHandler />} />} />
+            <Route exact path="/about" element={<Layout content={<Test />} />} />
           </Routes>
         )}
       </div>

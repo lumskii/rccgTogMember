@@ -1,3 +1,9 @@
+export const resultInitialState = {
+    score: 0,
+    correctAnswers: 0,
+    wrongAnswers: 0
+}; 
+
 const VideoData = [
     {
         videoUrl: "https://dai.ly/k6pN3FvXwMCTAKzHxQ7",

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-export default function Questions({ questions, numQuestions, onAttempt }) {
+export default function Questions({ questions, numQuestions, onAttempt, correctAnswer }) {
   const [selectedOptions, setSelectedOptions] = useState(
     Array(numQuestions).fill(null)
   );
@@ -54,7 +54,7 @@ export default function Questions({ questions, numQuestions, onAttempt }) {
                 </label>
               </li>
             ))}
-            {selectedOptions[questionIndex] !== null && (
+            {/* {selectedOptions[questionIndex] !== null && (
               <p
                 style={{
                   color: incorrectAnswers[questionIndex] ? "red" : "green",
@@ -65,10 +65,40 @@ export default function Questions({ questions, numQuestions, onAttempt }) {
                   ? "Incorrect!"
                   : "Correct!"}
               </p>
-            )}
+            )} */}
           </ul>
         </div>
       ))}
     </div>
   );
 }
+
+{/* <div>
+          <Dialog
+            open={showResult}
+            onClose={() => setShowResult(false)}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">
+              <h3>Result</h3>
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                <h4>Score</h4>
+                <p>
+                  Total score: <span>{result.score}</span>
+                </p>
+                <p>
+                  Correct Answers: <span>{result.correctAnswers}</span>
+                </p>
+                <p>
+                  Wrong Answers: <span>{result.wrongAnswers}</span>
+                </p>
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <MuiButton label="OK" onClick={() => setShowResult(false)} />
+            </DialogActions>
+          </Dialog>
+        </div> */}

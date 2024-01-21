@@ -55,6 +55,23 @@ export default function Login() {
       .catch((error) => alert(error.message));
   };
 
+  const handleChangePassword = async (e) => {
+    e.preventDefault();
+
+    const email = emailRef.current.value;
+
+    // Check if the email exists in Firebase
+    try {
+      const userCredential = await auth.signInWithEmailAndPassword(email, 'dummyPassword');
+      // If successful, user exists, proceed with password reset
+      await auth.sendPasswordResetEmail(email);
+      alert("Password reset email sent. Check your inbox.");
+    } catch (error) {
+      // If the user does not exist, show an alert
+      alert("You are not yet registered. Please register and then try again.");
+    }
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -116,15 +133,15 @@ export default function Login() {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
+                <Link href="#" variant="body2" onClick={handleChangePassword}>
+                  Change Password
                 </Link>
               </Grid>
-              <Grid item>
+              {/* <Grid item>
                 <Link href="/" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
-              </Grid>
+              </Grid> */}
             </Grid>
           </Box>
         </Box>

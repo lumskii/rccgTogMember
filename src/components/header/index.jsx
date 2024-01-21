@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AppBar, Toolbar, Typography, Button, IconButton, Menu, MenuItem, ListItemIcon, Divider } from "@mui/material";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import { Link } from "react-router-dom";
@@ -11,6 +11,30 @@ export const user = {
 
 function Header() {
   const [anchorEl, setAnchorEl] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(async (authUser) => {
+      if (authUser) {
+        try {
+          const response = await fetch(`https://65ad2e72adbd5aa31be04b9f.mockapi.io/users?email=${authUser.email}`);
+          if (response.ok) {
+            const userData = await response.json();
+            const userFromMockApi = userData.length > 0 ? userData[0] : null;
+
+            setCurrentUser(userFromMockApi);
+          } else {
+            console.error('Failed to fetch user data from MockAPI')
+          }
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+        }
+      } else {
+        setCurrentUser(null);
+      }
+    });
+    return () => unsubscribe();
+  }, []);
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -74,7 +98,7 @@ function Header() {
               open={Boolean(anchorEl)}
               onClose={handleClose}
             >
-              <MenuItem sx={{ pointerEvents: 'none' }}>{user.name}</MenuItem>
+              <MenuItem sx={{ pointerEvents: 'none' }}>{currentUser ? currentUser.firstName : `user`}</MenuItem>
               <Divider />
               <MenuItem onClick={handleLogout}>
                 <ListItemIcon>

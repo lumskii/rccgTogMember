@@ -18,6 +18,9 @@ const FormHandler = ({ firstName, lastName }) => {
   const [attempt, setAttempt] = useState(null);
   const [incorrectAnswers, setIncorrectAnswers] = useState([]);
 
+  const correctAnswers = VideoData[Math.floor(currentPage / 2)]?.questions.map(
+    (question) => question.correctAnswer
+  );
 
   const idxStyle = {
     fontSize: "1em",
@@ -137,16 +140,11 @@ const FormHandler = ({ firstName, lastName }) => {
         <div>
           <div style={{ display: "grid" }}>
             <h1 style={{ display: "flex", justifyContent: "center" }}>
-              Questions 
-              <span
-              style={idxStyle}
-            >
-              {Math.ceil(currentPage / 2)}
-            </span>
-            /
-            <span style={{ fontSize: "1em", fontWeight: "bold" }}>
-              {VideoData.length}
-            </span>
+              Questions
+              <span style={idxStyle}>{Math.ceil(currentPage / 2)}</span>/
+              <span style={{ fontSize: "1em", fontWeight: "bold" }}>
+                {VideoData.length}
+              </span>
             </h1>
             <p
               style={{
@@ -162,9 +160,16 @@ const FormHandler = ({ firstName, lastName }) => {
             questions={VideoData[Math.floor(currentPage / 2)]?.questions}
             numQuestions={3}
             onAttempt={setAttempt}
+            correctAnswer={correctAnswers}
           />
 
-          <div style={{ display: "flex", justifyContent: "center" }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              marginTop: "20px",
+            }}
+          >
             <MuiButton label="Submit" onClick={handleQuestionSubmit} />
           </div>
         </div>
