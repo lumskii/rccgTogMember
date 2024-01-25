@@ -1,4 +1,4 @@
-import { LockOutlined } from "@mui/icons-material";
+import { LockOutlined, TextFields } from "@mui/icons-material";
 import {
   Avatar,
   Box,
@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import React, { useRef } from "react";
 import { auth } from "../../firebase";
+import axios from "axios";
 
 function Copyright(props) {
   return (
@@ -25,12 +26,11 @@ function Copyright(props) {
       align="center"
       {...props}
     >
-      {"Copyright © "}
-      <Link color="inherit" href="https://rccgthog.org/">
-        RCCGTOG
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
+      {" © "}
+      {new Date().getFullYear()}{" "}
+      <Link color="inherit" href="https://rccgtogp.org/">
+        RCCGTOGP
+      </Link>
     </Typography>
   );
 }
@@ -52,7 +52,16 @@ export default function Login() {
       .then((authUser) => {
         console.log(authUser);
       })
-      .catch((error) => alert(error.message));
+      .catch((error) => {
+        // Customize error messages based on error code
+        let errorMessage = "An error occurred. Please try again.";
+
+        if (error.code === "auth/invalid-login-credentials") {
+          errorMessage =
+            "User not found. Please check your email and password then try again.";
+        }
+        alert(errorMessage);
+      });
   };
 
   const handleChangePassword = async (e) => {
@@ -60,15 +69,25 @@ export default function Login() {
 
     const email = emailRef.current.value;
 
-    // Check if the email exists in Firebase
     try {
-      const userCredential = await auth.signInWithEmailAndPassword(email, 'dummyPassword');
-      // If successful, user exists, proceed with password reset
-      await auth.sendPasswordResetEmail(email);
-      alert("Password reset email sent. Check your inbox.");
+      // Check if the email exists in MockAPI
+      const mockApiResponse = await axios.get(
+        `${process.env.REACT_APP_API_ENDPOINT}/users?email=${email}`
+      );
+
+      if (mockApiResponse.data.length > 0) {
+        // If the email exists in MockAPI, proceed with Firebase password reset
+        await auth.sendPasswordResetEmail(email);
+        alert("Password reset email sent. Check your inbox.");
+      } else {
+        // If the email does not exist in MockAPI, show an alert
+        alert(
+          "You are not yet registered. Please register and then try again."
+        );
+      }
     } catch (error) {
-      // If the user does not exist, show an alert
-      alert("You are not yet registered. Please register and then try again.");
+      // Handle any errors from the MockAPI request
+      alert("Error checking email existence. Please try again.");
     }
   };
 
@@ -84,11 +103,15 @@ export default function Login() {
             alignItems: "center",
           }}
         >
+          <h3 style={{ textAlign: "center", justifyContent: "center", margin: "10px" }}>
+            Please set a password if this is your first time logging into
+            the platform.
+          </h3>
           <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
             <LockOutlined />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Login
+            Membership Portal
           </Typography>
           <Box
             component="form"
@@ -133,9 +156,14 @@ export default function Login() {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2" onClick={handleChangePassword}>
-                  Change Password
-                </Link>
+                <Button
+                  href="#"
+                  onClick={handleChangePassword}
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2 }}
+                >
+                  Set Password
+                </Button>
               </Grid>
               {/* <Grid item>
                 <Link href="/" variant="body2">

@@ -17,7 +17,7 @@ function Header() {
     const unsubscribe = auth.onAuthStateChanged(async (authUser) => {
       if (authUser) {
         try {
-          const response = await fetch(`https://65ad2e72adbd5aa31be04b9f.mockapi.io/users?email=${authUser.email}`);
+          const response = await fetch(`${process.env.REACT_APP_API_ENDPOINT}/users?email=${authUser.email}`);
           if (response.ok) {
             const userData = await response.json();
             const userFromMockApi = userData.length > 0 ? userData[0] : null;
@@ -63,13 +63,13 @@ function Header() {
             fontWeight: "bold",
           }}
         >
-          RCCGTOG
+          TOGP 
         </Typography>
-        <Button component={Link} to="/about" color="inherit">
+        {/* <Button component={Link} to="/about" color="inherit">
           About
-        </Button>
+        </Button> */}
         <Button component={Link} to="/contact" color="inherit">
-          Contact
+          Help
         </Button>
         {auth.currentUser && (
           <div>

@@ -1,15 +1,24 @@
 import React, { useEffect, useState } from "react";
 
 export default function Questions({ questions, numQuestions, onAttempt, correctAnswer }) {
+  const [firstAns, secondAns, thirdAns] = correctAnswer;
+  const [showResult, setShowResult] = useState(false);
+  const [ansIdx, setAnsIdx] = useState(null);
+  const [ans, setAns] = useState(null);
+
   const [selectedOptions, setSelectedOptions] = useState(
     Array(numQuestions).fill(null)
-  );
-  const [incorrectAnswers, setIncorrectAnswers] = useState(
-    Array(numQuestions).fill(false)
   );
   const [questionAnswered, setQuestionAnswered] = useState(
     Array(numQuestions).fill(false)
   );
+
+  const selectedOptionsStrings = selectedOptions.map((optionIndex, questionIndex) => {
+    if (questionAnswered[questionIndex]) {
+      return questions[questionIndex].options[optionIndex];
+    }
+    return null;
+  });
 
   useEffect(() => {
     // Notify parent component that an option has been selected
@@ -29,6 +38,22 @@ export default function Questions({ questions, numQuestions, onAttempt, correctA
     });
   };
 
+  const onAnswerClick = () => {
+    const selectedOption = selectedOptionsStrings[ansIdx];
+  
+    if (selectedOption !== null) {
+      if (selectedOption === correctAnswer[ansIdx]) {
+        setAns(true);
+        console.log("Correct!");
+      } else {
+        setAns(false);
+        console.log("Incorrect.");
+      }
+    }
+  };
+
+  console.log(selectedOptionsStrings, correctAnswer[ansIdx]);
+
   return (
     <div>
       {questions.map((question, questionIndex) => (
@@ -39,33 +64,29 @@ export default function Questions({ questions, numQuestions, onAttempt, correctA
               <li
                 key={optionIndex}
                 style={{ listStyleType: "none", margin: "10px" }}
+                onClick={() => {
+                  handleOptionSelect(questionIndex, optionIndex);
+                  setAnsIdx(questionIndex);
+                  onAnswerClick();
+                }}
               >
-                <input
+                {/* <input
                   type="radio"
                   id={`q${question.id}o${optionIndex}`}
                   name={`q${question.id}`}
                   checked={selectedOptions[questionIndex] === optionIndex}
-                  onChange={() =>
-                    handleOptionSelect(questionIndex, optionIndex)
+                  onChange={() => {
+                    handleOptionSelect(questionIndex, optionIndex);
+                    onAnswerClick()
                   }
-                />
+                    
+                  }
+                /> */}
                 <label htmlFor={`q${question.id}o${optionIndex}`}>
                   {option}
                 </label>
               </li>
             ))}
-            {/* {selectedOptions[questionIndex] !== null && (
-              <p
-                style={{
-                  color: incorrectAnswers[questionIndex] ? "red" : "green",
-                  margin: "10px",
-                }}
-              >
-                {incorrectAnswers[questionIndex]
-                  ? "Incorrect!"
-                  : "Correct!"}
-              </p>
-            )} */}
           </ul>
         </div>
       ))}
