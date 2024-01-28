@@ -1,5 +1,5 @@
 $primary: #1e90ff;
-$accent: #ff6347;
+$accent: #0843f6;
 $bg: #ffffff;
 $bg-accent: #e7e8e9;
 $disabled: #9c9c9c;
@@ -12,13 +12,26 @@ ul {
     li {
         text-decoration: none;
         list-style: none;
-        color: inherit;
-        font-size: "16px";
-        background: inherit;
-        border: 1px solid #e7e8e9;
-        border-radius: "5px";
-        padding: "10px";
-        margin-top: "10px";
-        cursor: pointer
+        color: $foreground;
+        width: 65%;
+        font-size: 16px;
+        background: $bg;
+        border: 1px solid $disabled;
+        border-radius: 16px;
+        padding: 10px;
+        margin-top: 10px;
+        cursor: pointer;
+        margin-left: 20px;
+        transition: all 0.2s ease-in-out;
+        &:hover {
+            background: $accent;
+            color: $bg;
+        }
+    }
+
+    .selected-answer {
+        background: $primary;
+        border: 1px solid $accent;
+        color: $bg;
     }
 }

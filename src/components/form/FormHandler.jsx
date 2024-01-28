@@ -17,10 +17,19 @@ const FormHandler = ({ firstName, lastName }) => {
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const [attempt, setAttempt] = useState(null);
   const [incorrectAnswers, setIncorrectAnswers] = useState([]);
+  const [allQuestionsAnswered, setAllQuestionsAnswered] = useState(false);
+  const [isSubmitClicked, setIsSubmitClicked] = useState(false);
 
   const correctAnswers = VideoData[Math.floor(currentPage / 2)]?.questions.map(
     (question) => question.correctAnswer
   );
+
+  // Modify the onAttempt callback to check if all questions have been answered
+  const handleAttempt = (attempts) => {
+    setAttempt(attempts);
+    const allAnswered = attempts.every((attempt) => attempt !== null);
+    setAllQuestionsAnswered(allAnswered);
+  };
 
   const idxStyle = {
     fontSize: "1em",
@@ -42,41 +51,6 @@ const FormHandler = ({ firstName, lastName }) => {
 
   const handleVideoPlay = () => {
     setIsVideoPlaying(true);
-  };
-
-  const handleQuestionSubmit = () => {
-    const currentQuestions = VideoData[Math.floor(currentPage / 2)]?.questions;
-
-    // Check if all questions are attempted
-    const areAllAttempted =
-      attempt !== null && attempt.every((option) => option !== null);
-
-    if (!areAllAttempted) {
-      alert("Please attempt all questions before submitting.");
-      return;
-    }
-
-    // Check if the selected options are correct
-    const areAllCorrect = currentQuestions.every(
-      (question, index) => attempt[index] === question.correctAnswer
-    );
-
-    if (areAllCorrect) {
-      // If all answers are correct, display a different message
-      const message = "All answers are correct! Move on to the next page.";
-      alert(message);
-
-      // Move to the next page
-      setCurrentPage((prevPage) => prevPage + 1);
-    } else {
-      // Display a dialog with incorrect answers
-      const incorrect = currentQuestions
-        .filter((question, index) => attempt[index] !== question.correctAnswer)
-        .map((question) => question.correctAnswer);
-
-      setIncorrectAnswers(incorrect);
-      setCongratulationsOpen(true);
-    }
   };
 
   const handleCongratulationsClose = () => {
@@ -159,19 +133,10 @@ const FormHandler = ({ firstName, lastName }) => {
           <Questions
             questions={VideoData[Math.floor(currentPage / 2)]?.questions}
             numQuestions={3}
-            onAttempt={setAttempt}
+            onAttempt={handleAttempt}
             correctAnswer={correctAnswers}
+            setIsSubmitClicked={setIsSubmitClicked}
           />
-
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              marginTop: "20px",
-            }}
-          >
-            <MuiButton label="Submit" onClick={handleQuestionSubmit} />
-          </div>
         </div>
       );
     } else if (currentPage === VideoData.length * 2) {
@@ -206,7 +171,12 @@ const FormHandler = ({ firstName, lastName }) => {
               onClick={
                 currentPage === VideoData.length * 2 ? null : handleVideoFinish
               }
-              disabled={isVideoPlaying || currentPage % 2 === 0}
+              disabled={
+                isVideoPlaying ||
+                currentPage % 2 === 0 ||
+                !allQuestionsAnswered ||
+                !isSubmitClicked
+              }
             />
           </div>
         </div>

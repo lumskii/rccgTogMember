@@ -1,37 +1,71 @@
-import React from 'react'
-import MuiButton from '../button/Button';
-import certificateBackground from '../../pages/images/certificate.jpg'
+import React from "react";
+import MuiButton from "../button/Button";
+import { certificateBackground } from "../../pages/image/certificate";
+import { jsPDF } from "jspdf";
 
+export default function Certificate({ firstName, lastName, performance }) {
+  const generateCertificate = () => {
+    const doc = new jsPDF();
+    // Adding image Canvas
+    doc.addImage(certificateBackground, "PNG", 0, 0, 210, 297);
 
-export default function Certificate({ firstName, lastName, answers }) {
-  const certBack = certificateBackground;
-    const generateCertificate = () => {
-        // Generate the certificate content dynamically
-        const certificateContent = `
-        <div style="text-align: center; background-image: url('${certBack}'); background-size: cover; height: 100vh; color: #fff;">
-          <h1>Certificate of Completion</h1>
+    // Adding content text
+    doc.setFontSize(20);
+    doc.setFont("helvetica", "bold")
+    doc.setTextColor(0, 128, 0);
+    doc.text("RCCG Throne of Grace Parish", 105, 20, {
+      align: "center",
+    });
 
-          <p>This is to certify that ${firstName} ${lastName} has completed the membership training.</p>
+    doc.setFontSize(28);
+    doc.setFont("Alex Brush", "bold")
+    doc.setTextColor(0, 0, 0);
+    doc.text("Certificate of Completion", 105, 50, {
+      align: "center",
+    });
 
-          <p>Date: ${new Date().toLocaleDateString()}</p>
-          </div>
-        `;
+    doc.setFontSize(20);
+    doc.setTextColor(0, 0, 0);
+    doc.text(`${firstName} ${lastName}`, 105, 100, { align: "center" });
 
-        // Create a Blob and download it as a text file
-        const blob = new Blob([certificateContent], { type: 'text/html' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'certificate.html';
-        a.click();
-        URL.revokeObjectURL(url);
-    }
+    doc.setFontSize(14);
+    doc.setTextColor(0, 0, 0);
+    doc.text("has successfully completed the membership training.", 105, 150, {
+      align: "center",
+    });
+
+    doc.setTextColor(0, 0, 0);
+    doc.text(`Date: ${new Date().toLocaleDateString()}`, 105, 200, {
+      align: "center",
+    });
+
+    doc.setFontSize(16);
+    doc.setTextColor(0, 0, 0);
+    doc.text(`Performance: ${performance}`, 105, 230, { align: "center" });
+
+    doc.save("certificate.pdf");
+  };
 
   return (
-    <div>
-        <h1>Certificate</h1>
-        <p>Congratulations, {firstName} {lastName}!</p>
+    <div
+      style={{
+        textAlign: "center",
+        height: "80vh",
+        display: "grid",
+        justifyContent: "center",
+      }}
+    >
+      <h1>Certificate</h1>
+      <p style={{ fontWeight: "bold" }}>Congratulations</p>
+      <p style={{ fontWeight: "bold" }}>
+        {firstName} {lastName}
+      </p>
+      <p>You have successfully completed the membership training.</p>
+      <p>Your Performance: {performance}</p>
+      <p>Click the link below to download your certficate</p>
+      <div>
         <MuiButton onClick={generateCertificate} label="Download" />
+      </div>
     </div>
-  )
+  );
 }
