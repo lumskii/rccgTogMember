@@ -65,10 +65,7 @@ function Header() {
         >
           TOGP 
         </Typography>
-        {/* <Button component={Link} to="/about" color="inherit">
-          About
-        </Button> */}
-        <Button component={Link} to="/contact" color="inherit">
+        <Button component={Link} to="/help" color="inherit">
           Help
         </Button>
         {auth.currentUser && (
@@ -98,7 +95,7 @@ function Header() {
               open={Boolean(anchorEl)}
               onClose={handleClose}
             >
-              <MenuItem sx={{ pointerEvents: 'none' }}>{currentUser ? currentUser.firstName : `user`}</MenuItem>
+              <MenuItem sx={{ pointerEvents: 'none' }}>{currentUser ? `Hello ${currentUser.firstName}` : `user`}</MenuItem>
               <Divider />
               <MenuItem onClick={handleLogout}>
                 <ListItemIcon>

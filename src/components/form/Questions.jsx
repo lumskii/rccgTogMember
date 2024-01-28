@@ -15,7 +15,8 @@ export default function Questions({
   numQuestions,
   onAttempt,
   correctAnswer,
-  setIsSubmitClicked
+  setIsSubmitClicked,
+  setTotalScore
 }) {
   // const [firstAns, secondAns, thirdAns] = correctAnswer;
   const [showResult, setShowResult] = useState(false);
@@ -111,6 +112,7 @@ export default function Questions({
       if (selectedOption === correctAnswer[questionIndex]) {
         newResult.score += 1;
         newResult.correctAnswers += 1;
+        setTotalScore(prevScore => prevScore + 1); // Update the total score
       } else {
         newResult.wrongAnswers += 1;
       }

@@ -3,7 +3,9 @@ import MuiButton from "../button/Button";
 import { certificateBackground } from "../../pages/image/certificate";
 import { jsPDF } from "jspdf";
 
-export default function Certificate({ firstName, lastName, performance }) {
+export default function Certificate({ firstName, lastName, totalScore }) {
+  const performance = totalScore >= 12 ? "Excellent" : "Average";
+
   const generateCertificate = () => {
     const doc = new jsPDF();
     // Adding image Canvas

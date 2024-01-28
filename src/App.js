@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/header/index.jsx";
 import Layout from "./components/MainLayout/index.jsx";
@@ -15,8 +15,9 @@ import { CircularProgress } from "@mui/material";
 import FormHandler from "./components/form/FormHandler.jsx";
 // import Signup from "./pages/SignupPage/index.jsx";
 import Login from "./pages/LoginPage/index.jsx";
-import Test from "./components/form/Test.jsx";
 import Signup from "./pages/SignupPage/index.jsx";
+import Help from "./pages/Help.jsx";
+import NotFound from "./pages/NotFound.jsx";
 
 function App() {
   const user = useSelector(selectUser);
@@ -86,11 +87,13 @@ function App() {
             {/* <Route exact path="/" element={<Layout content={<Signup />} />} /> */}
             <Route exact path="/" element={<Layout content={<Login />} />} />
             <Route exact path="/signupAdmin" element={<Layout content={<Signup />} />} />
+            <Route path="*" element={<Layout content={<NotFound />} />} />
           </Routes>
         ) : (
           <Routes>
             <Route exact path="/" element={<Layout content={<FormHandler />} />} />
-            <Route exact path="/about" element={<Layout content={<Test />} />} />
+            <Route exact path="/help" element={<Layout content={<Help />} />} />
+            <Route path="*" element={<Layout content={<NotFound />} />} />
           </Routes>
         )}
       </div>

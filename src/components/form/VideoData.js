@@ -6,7 +6,7 @@ export const resultInitialState = {
 
 const VideoData = [
     {
-        videoUrl: "https://dai.ly/k6pN3FvXwMCTAKzHxQ7",
+        videoUrl: "https://dai.ly/k4xJWvVmqC19TyzTIaS",
         questions: [
             {
                 id: 1,

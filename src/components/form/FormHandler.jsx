@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import VideoPage from "./Video";
 import Questions from "./Questions";
 import Certificate from "./Certificate";
@@ -9,9 +9,9 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { user } from "../header";
+import { auth } from "../../firebase";
 
-const FormHandler = ({ firstName, lastName }) => {
+const FormHandler = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [congratulationsOpen, setCongratulationsOpen] = useState(false);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
@@ -19,13 +19,45 @@ const FormHandler = ({ firstName, lastName }) => {
   const [incorrectAnswers, setIncorrectAnswers] = useState([]);
   const [allQuestionsAnswered, setAllQuestionsAnswered] = useState(false);
   const [isSubmitClicked, setIsSubmitClicked] = useState(false);
+  const [videoUrl, setVideoUrl] = useState(null);
+  const [totalScore, setTotalScore] = useState(0);
+  const [currentUser, setCurrentUser] = useState(null);
 
   const correctAnswers = VideoData[Math.floor(currentPage / 2)]?.questions.map(
     (question) => question.correctAnswer
   );
 
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(async (authUser) => {
+      if (authUser) {
+        try {
+          const response = await fetch(`${process.env.REACT_APP_API_ENDPOINT}/users?email=${authUser.email}`);
+          if (response.ok) {
+            const userData = await response.json();
+            const userFromMockApi = userData.length > 0 ? userData[0] : null;
+
+            setCurrentUser(userFromMockApi);
+          } else {
+            console.error('Failed to fetch user data from MockAPI')
+          }
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+        }
+      } else {
+        setCurrentUser(null);
+      }
+    });
+    return () => unsubscribe();
+  }, []);
+
+
   // Modify the onAttempt callback to check if all questions have been answered
-  const handleAttempt = (attempts) => {
+  const handleAttempt = (attempts, isCorrect) => {
+    // Update the total score
+    if (isCorrect) {
+      setTotalScore((prevScore) => prevScore + 1);
+    };
+
     setAttempt(attempts);
     const allAnswered = attempts.every((attempt) => attempt !== null);
     setAllQuestionsAnswered(allAnswered);
@@ -59,7 +91,8 @@ const FormHandler = ({ firstName, lastName }) => {
     if (
       incorrectAnswers.length === 0 &&
       currentPage % 2 === 1 &&
-      currentPage < VideoData.length * 2 - 1
+      currentPage < VideoData.length * 2 - 1 &&
+      totalScore > 5
     ) {
       // After clicking "OK" in the dialog, move to the Certificate page
       setCurrentPage(VideoData.length * 2);
@@ -70,6 +103,8 @@ const FormHandler = ({ firstName, lastName }) => {
 
     // Reset incorrect answers and attempt
     setIncorrectAnswers([]);
+    setCurrentPage(0);
+    setTotalScore(0);
     setAttempt(null);
   };
 
@@ -105,6 +140,7 @@ const FormHandler = ({ firstName, lastName }) => {
             videoUrl={VideoData[currentPage / 2]?.videoUrl}
             onEnded={handleVideoFinish}
             onPlay={handleVideoPlay}
+            setVideoUrl={setVideoUrl}
           />
         </div>
       );
@@ -136,11 +172,12 @@ const FormHandler = ({ firstName, lastName }) => {
             onAttempt={handleAttempt}
             correctAnswer={correctAnswers}
             setIsSubmitClicked={setIsSubmitClicked}
+            setTotalScore={setTotalScore}
           />
         </div>
       );
     } else if (currentPage === VideoData.length * 2) {
-      return <Certificate firstName={user.name} lastName={lastName} />;
+      return <Certificate firstName={currentUser.firstName} lastName={currentUser.lastName} totalScore={totalScore} />;
     } else {
       return null;
     }
@@ -189,19 +226,19 @@ const FormHandler = ({ firstName, lastName }) => {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {incorrectAnswers.length === 0
+          {incorrectAnswers.length === 0 ||  totalScore > 5
             ? `Congratulations!`
-            : `Incorrect Answers`}
+            : `Score Too Low`}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            {incorrectAnswers.length === 0
-              ? "You have completed this program."
-              : "Some answers are wrong. Please try again."}
+            {incorrectAnswers.length === 0 ||  totalScore > 5
+              ? `You have completed this program. Your total score is ${totalScore}`
+              : "Too many answers were wrong. Please try again."}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <MuiButton onClick={handleCongratulationsClose} label="OK" />
+          <MuiButton onClick={handleCongratulationsClose} label={totalScore > 5 ? "OK" : "Try Again"} />
         </DialogActions>
       </Dialog>
     </div>
