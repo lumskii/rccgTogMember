@@ -1,30 +1,40 @@
 import React, { useEffect, useState } from "react";
-import { AppBar, Toolbar, Typography, Button, IconButton, Menu, MenuItem, ListItemIcon, Divider } from "@mui/material";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  IconButton,
+  Menu,
+  MenuItem,
+  ListItemIcon,
+  Divider,
+} from "@mui/material";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import { Link } from "react-router-dom";
 import { auth } from "../../firebase";
 import { Logout } from "@mui/icons-material";
-
-export const user = {
-  name: "John Doe",
-}
+import { useNavigate } from "react-router-dom";
 
 function Header() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
+  const history = useNavigate();
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (authUser) => {
       if (authUser) {
         try {
-          const response = await fetch(`${process.env.REACT_APP_API_ENDPOINT}/users?email=${authUser.email}`);
+          const response = await fetch(
+            `${process.env.REACT_APP_API_ENDPOINT}/users?email=${authUser.email}`
+          );
           if (response.ok) {
             const userData = await response.json();
             const userFromMockApi = userData.length > 0 ? userData[0] : null;
 
             setCurrentUser(userFromMockApi);
           } else {
-            console.error('Failed to fetch user data from MockAPI')
+            console.error("Failed to fetch user data from MockAPI");
           }
         } catch (error) {
           console.error("Error fetching user data:", error);
@@ -47,7 +57,8 @@ function Header() {
   const handleLogout = () => {
     auth.signOut();
     handleClose();
-  }
+    history("/");
+  };
 
   return (
     <AppBar position="static">
@@ -63,9 +74,18 @@ function Header() {
             fontWeight: "bold",
           }}
         >
-          TOGP 
+          TOGP
         </Typography>
-        <Button component={Link} to="/help" color="inherit">
+        <Button
+          component={Link}
+          to={currentUser ? "/help" : "#"}
+          color="inherit"
+          onClick={() => {
+            if (!currentUser) {
+              alert("You need to login to access this page.");
+            }
+          }}
+        >
           Help
         </Button>
         {auth.currentUser && (
@@ -84,18 +104,20 @@ function Header() {
               id="menu-appbar"
               anchorEl={anchorEl}
               anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'right',
+                vertical: "bottom",
+                horizontal: "right",
               }}
               keepMounted
               transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
+                vertical: "top",
+                horizontal: "right",
               }}
               open={Boolean(anchorEl)}
               onClose={handleClose}
             >
-              <MenuItem sx={{ pointerEvents: 'none' }}>{currentUser ? `Hello ${currentUser.firstName}` : `user`}</MenuItem>
+              <MenuItem sx={{ pointerEvents: "none" }}>
+                {currentUser ? `Hello ${currentUser.firstName}` : `user`}
+              </MenuItem>
               <Divider />
               <MenuItem onClick={handleLogout}>
                 <ListItemIcon>
@@ -112,5 +134,3 @@ function Header() {
 }
 
 export default Header;
-
-

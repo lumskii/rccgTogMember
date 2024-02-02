@@ -40,7 +40,7 @@ const VideoData = [
             {
                 id: 2,
                 question: "When did RCCG Throne of Grace Phoenix Arizona hold its groundbreaking service?",
-                options: ["9th October 2016", "26th June 2016", "16th October 2015", "26th June 2015"],
+                options: ["9th June 2016", "26th June 2016", "16th October 2015", "26th June 2015"],
                 correctAnswer: "9th June 2016"
             },
             {

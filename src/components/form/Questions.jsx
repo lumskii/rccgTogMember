@@ -29,6 +29,7 @@ export default function Questions({
     Array(numQuestions).fill(false)
   );
   const [result, setResult] = useState(resultInitialState);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleOptionSelect = (questionIndex, optionIndex) => {
     setSelectedOptions((prevOptions) => {
@@ -79,15 +80,6 @@ export default function Questions({
     });
   }, [selectedOptions, questionAnswered, onAttempt, onAnswerClick]);
 
-  // const selectedOptionsStrings = selectedOptions.map((optionIndex, questionIndex) => {
-  //   if (questionAnswered[questionIndex]) {
-  //     return questions[questionIndex].options[optionIndex];
-  //   }
-  //   return null;
-  // });
-
-  // console.log(selectedOptionsStrings, correctAnswer);
-
   const handleQuestionSubmit = () => {
     // Check if all questions are attempted
     const areAllAttempted = selectedOptions.every((option) => option !== null);
@@ -122,6 +114,7 @@ export default function Questions({
     setResult(newResult);
     setShowResult(true);
     setIsSubmitClicked(true);
+    setIsSubmitted(true);
   };
 
   return (
@@ -131,7 +124,7 @@ export default function Questions({
           {questions.map((question, questionIndex) => (
             <div key={question.id}>
               <h3 style={{ margin: "20px 10px" }}>{question.question}</h3>
-              <ul>
+              <ul className="question-container">
                 {question.options.map((option, optionIndex) => (
                   <li
                     key={optionIndex}
@@ -159,7 +152,7 @@ export default function Questions({
               marginTop: "20px",
             }}
           >
-            <MuiButton label="Submit" onClick={handleQuestionSubmit} />
+            <MuiButton label="Submit" onClick={handleQuestionSubmit} disabled={isSubmitted} />
           </div>
         </div>
       ) : (

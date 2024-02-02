@@ -1,52 +1,31 @@
-import React from "react";
+import React, { useEffect } from "react";
 import MuiButton from "../button/Button";
-import { certificateBackground } from "../../pages/image/certificate";
-import { jsPDF } from "jspdf";
+import axios from "axios";
+import { useCertificate } from "../hook/CertificateProvider";
 
-export default function Certificate({ firstName, lastName, totalScore }) {
+export default function Certificate({
+  firstName,
+  lastName,
+  totalScore,
+  currentUser,
+}) {
+  useEffect(() => {
+    axios
+      .put(`${process.env.REACT_APP_API_ENDPOINT}/users/${currentUser && currentUser.id}`, {
+        hasTakenTest: true,
+        score: totalScore,
+      })
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, [currentUser, totalScore]);
+
+  const { generateCertificate } = useCertificate();
+
   const performance = totalScore >= 12 ? "Excellent" : "Average";
-
-  const generateCertificate = () => {
-    const doc = new jsPDF();
-    // Adding image Canvas
-    doc.addImage(certificateBackground, "PNG", 0, 0, 210, 297);
-
-    // Adding content text
-    doc.setFontSize(20);
-    doc.setFont("helvetica", "bold")
-    doc.setTextColor(0, 128, 0);
-    doc.text("RCCG Throne of Grace Parish", 105, 20, {
-      align: "center",
-    });
-
-    doc.setFontSize(28);
-    doc.setFont("Alex Brush", "bold")
-    doc.setTextColor(0, 0, 0);
-    doc.text("Certificate of Completion", 105, 50, {
-      align: "center",
-    });
-
-    doc.setFontSize(20);
-    doc.setTextColor(0, 0, 0);
-    doc.text(`${firstName} ${lastName}`, 105, 100, { align: "center" });
-
-    doc.setFontSize(14);
-    doc.setTextColor(0, 0, 0);
-    doc.text("has successfully completed the membership training.", 105, 150, {
-      align: "center",
-    });
-
-    doc.setTextColor(0, 0, 0);
-    doc.text(`Date: ${new Date().toLocaleDateString()}`, 105, 200, {
-      align: "center",
-    });
-
-    doc.setFontSize(16);
-    doc.setTextColor(0, 0, 0);
-    doc.text(`Performance: ${performance}`, 105, 230, { align: "center" });
-
-    doc.save("certificate.pdf");
-  };
 
   return (
     <div
@@ -66,7 +45,10 @@ export default function Certificate({ firstName, lastName, totalScore }) {
       <p>Your Performance: {performance}</p>
       <p>Click the link below to download your certficate</p>
       <div>
-        <MuiButton onClick={generateCertificate} label="Download" />
+        <MuiButton
+          onClick={() => generateCertificate(firstName, lastName, totalScore)}
+          label="Download"
+        />
       </div>
     </div>
   );

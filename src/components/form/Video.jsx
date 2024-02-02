@@ -1,4 +1,5 @@
-import { Slider, Typography } from "@mui/material";
+import { VolumeDown, VolumeUp } from "@mui/icons-material";
+import { Box, Slider, Stack, Typography } from "@mui/material";
 import React, { useState } from "react";
 import ReactPlayer from "react-player";
 
@@ -41,8 +42,8 @@ const VideoPage = ({ videoUrl, onEnded, onPlay, setVideoUrl }) => {
           }
         />
       </div>
-      <div
-        style={{ display: "flex", justifyContent: "center", marginTop: "10px" }}
+      <Box
+        sx={{ marginTop: "10px" }}
       >
         {/* <Select
           value={playbackRate}
@@ -54,20 +55,19 @@ const VideoPage = ({ videoUrl, onEnded, onPlay, setVideoUrl }) => {
           <MenuItem value={1.5}>1.5x</MenuItem>
           <MenuItem value={2}>2x</MenuItem>
         </Select> */}
-        <div style={{ marginLeft: "10px", marginRight: "10px", marginTop: "2px"}}>
-        <Typography id="volume" gutterBottom>
-          Volume
-        </Typography>
-        </div>
+        <Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
+        <VolumeDown />
         <Slider
           value={volume}
           onChange={handleVolumeChange}
           min={0}
           max={1}
           step={0.1}
-          aria-labelledby="Volume"
+          aria-label="Volume"
         />
-      </div>
+        <VolumeUp />
+        </Stack>
+      </Box>
     </div>
   );
 };
