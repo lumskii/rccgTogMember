@@ -6,7 +6,7 @@ const CertificateContext = createContext();
 
 export const CertificateProvider = ({ children }) => {
   const generateCertificate = (firstName, lastName, totalScore) => {
-    const performance = totalScore >= 12 ? "Excellent" : "Average";
+    // const performance = totalScore >= 12 ? "Excellent" : "Average";
     const doc = new jsPDF();
     // Adding image Canvas
     doc.addImage(certificateBackground, "PNG", 0, 0, 210, 297);

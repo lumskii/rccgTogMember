@@ -13,6 +13,7 @@ import { LockOutlined } from "@mui/icons-material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import React, { useRef } from "react";
 import { auth } from "../../firebase";
+import UserActivity from "../../components/UserActivity";
 
 function Copyright(props) {
   return (
@@ -118,6 +119,7 @@ function Signup() {
   };
 
   return (
+    <div style={{display:'flex', justifyContent:'space-around', alignItems:'center'}}>
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
@@ -127,6 +129,7 @@ function Signup() {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
+            flex: 1
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
@@ -202,6 +205,9 @@ function Signup() {
         <Copyright sx={{ mt: 5 }} />
       </Container>
     </ThemeProvider>
+
+    <UserActivity style={{ flex:1 }} />
+    </div>
   );
 }
 
