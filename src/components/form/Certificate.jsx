@@ -46,7 +46,7 @@ export default function Certificate({
       <p>Click the link below to download your certficate</p>
       <div>
         <MuiButton
-          onClick={() => generateCertificate(firstName, lastName, totalScore)}
+          onClick={() => generateCertificate(firstName, lastName)}
           label="Download"
         />
       </div>

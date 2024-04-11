@@ -80,7 +80,7 @@ const Landing = () => {
           <div style={{ margin: "30px" }}></div>
           <Button
             variant="contained"
-            onClick={() => generateCertificate(user.firstName, user.lastName, user.score)}
+            onClick={() => generateCertificate(user.firstName, user.lastName)}
           >
             Download Certificate
           </Button>

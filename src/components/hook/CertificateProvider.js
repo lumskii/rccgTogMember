@@ -44,7 +44,7 @@ export const CertificateProvider = ({ children }) => {
     doc.setFontSize(16);
     doc.setTextColor(0, 0, 0);
     doc.setFont("helvetica", "bold");
-    // doc.text(`${performance}`, 76, 236, { align: "center" });
+    doc.text(``, 76, 236, { align: "center" });
 
     doc.save("certificate.pdf");
   };
